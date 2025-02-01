@@ -6,23 +6,10 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
 
 type SkinConcern = 'Acne' | 'Aging' | 'Hyperpigmentation' | 'Redness' | 'Large Pores';
-
-interface UserProfile {
-    skinType: string;
-    concerns: SkinConcern[];
-    allergies: string[];
-    routineLevel: string;
-  }
   
   interface Product {
     name: string;
     category: string;
-  }
-
-  interface ProductRecommendations {
-    [key: string]: {
-      [key: string]: Product[];
-    };
   }
 
 const SkincareRecommendation = () => {
