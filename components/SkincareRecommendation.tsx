@@ -6,11 +6,6 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
 
 type SkinConcern = 'Acne' | 'Aging' | 'Hyperpigmentation' | 'Redness' | 'Large Pores';
-  
-  interface Product {
-    name: string;
-    category: string;
-  }
 
 const SkincareRecommendation = () => {
   const [step, setStep] = useState(1);
