@@ -2,9 +2,7 @@
 
 import * as React from "react";
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export const Card = React.forwardRef<HTMLDivElement, CardProps>(
+export const Card = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
@@ -15,7 +13,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
 );
 Card.displayName = "Card";
 
-export const CardHeader = React.forwardRef<HTMLDivElement, CardProps>(
+export const CardHeader = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
@@ -26,7 +24,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardProps>(
 );
 CardHeader.displayName = "CardHeader";
 
-export const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
+export const CardTitle = React.forwardRef<HTMLParagraphElement, React.ComponentPropsWithoutRef<"h3">>(
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
@@ -37,7 +35,7 @@ export const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttrib
 );
 CardTitle.displayName = "CardTitle";
 
-export const CardContent = React.forwardRef<HTMLDivElement, CardProps>(
+export const CardContent = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
   ({ className, ...props }, ref) => (
     <div ref={ref} className={`p-6 pt-0 ${className}`} {...props} />
   )

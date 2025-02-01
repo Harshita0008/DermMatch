@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
+import { CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
 
 const SkincareRecommendation = () => {
   const [step, setStep] = useState(1);
@@ -82,7 +82,7 @@ if (userProfile.skinType === 'Oily' && userProfile.concerns.includes('Aging')) {
       });
     });
   }
-  
+
   const handleSkinTypeSelect = (type) => {
     setUserProfile(prev => ({ ...prev, skinType: type }));
     setStep(2);
