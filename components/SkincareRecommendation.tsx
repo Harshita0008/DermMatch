@@ -5,6 +5,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
 
+type SkinConcern = 'Acne' | 'Aging' | 'Hyperpigmentation' | 'Redness' | 'Large Pores';
+
+interface UserProfile {
+    skinType: string;
+    concerns: SkinConcern[];
+    allergies: string[];
+    routineLevel: string;
+  }
+  
+  interface Product {
+    name: string;
+    category: string;
+  }
+
+  interface ProductRecommendations {
+    [key: string]: {
+      [key: string]: Product[];
+    };
+  }
+
 const SkincareRecommendation = () => {
   const [step, setStep] = useState(1);
   const [userProfile, setUserProfile] = useState({
@@ -16,10 +36,10 @@ const SkincareRecommendation = () => {
   const [showResults, setShowResults] = useState(false);
 
   const skinTypes = ['Oily', 'Dry', 'Combination'];
-  const skinConcerns = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Large Pores'];
+  const skinConcerns: SkinConcern[] = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Large Pores'];
   const commonAllergies = ['Fragrance', 'Essential Oils', 'Salicylic Acid', 'Benzoyl Peroxide', 'Nuts'];
   const routineLevels = ['Minimal', 'Medium', 'Complete'];
-
+  
   const productRecommendations = {
     Oily: {
         Minimal: [
