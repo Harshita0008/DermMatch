@@ -9,12 +9,18 @@ type SkinConcern = 'Acne' | 'Aging' | 'Hyperpigmentation' | 'Redness' | 'Large P
 
 const SkincareRecommendation = () => {
   const [step, setStep] = useState(1);
-  const [userProfile, setUserProfile] = useState({
+  const [userProfile, setUserProfile] = useState<{
+    skinType: string;
+    concerns: SkinConcern[];
+    allergies: string[];
+    routineLevel: string;
+  }>({
     skinType: '',
     concerns: [],
     allergies: [],
     routineLevel: '',
   });
+
   const [showResults, setShowResults] = useState(false);
 
   const skinTypes = ['Oily', 'Dry', 'Combination'];
