@@ -5,29 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
 
-type SkinConcern = 'Acne' | 'Aging' | 'Hyperpigmentation' | 'Redness' | 'Large Pores';
-
 const SkincareRecommendation = () => {
   const [step, setStep] = useState(1);
-  const [userProfile, setUserProfile] = useState<{
-    skinType: string;
-    concerns: SkinConcern[];
-    allergies: string[];
-    routineLevel: string;
-  }>({
+  const [userProfile, setUserProfile] = useState({
     skinType: '',
     concerns: [],
     allergies: [],
     routineLevel: '',
   });
-
   const [showResults, setShowResults] = useState(false);
 
   const skinTypes = ['Oily', 'Dry', 'Combination'];
-  const skinConcerns: SkinConcern[] = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Large Pores'];
+  const skinConcerns = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Large Pores'];
   const commonAllergies = ['Fragrance', 'Essential Oils', 'Salicylic Acid', 'Benzoyl Peroxide', 'Nuts'];
   const routineLevels = ['Minimal', 'Medium', 'Complete'];
-  
+
   const productRecommendations = {
     Oily: {
         Minimal: [
@@ -64,32 +56,6 @@ const SkincareRecommendation = () => {
         ]
     }
 };
-
-
-if (userProfile.skinType === 'Oily' && userProfile.concerns.includes('Aging')) {
-    productRecommendations.Oily.Complete.push({ name: 'Retinol 1% in Squalane - The Ordinary', category: 'Serum' });
-  }
-  if (userProfile.concerns.includes('Hyperpigmentation')) {
-    Object.keys(productRecommendations).forEach(skinType => {
-      Object.keys(productRecommendations[skinType]).forEach(level => {
-        productRecommendations[skinType][level].push({ name: 'Niacinamide 10% + Zinc 1% - The Ordinary', category: 'Serum' });
-      });
-    });
-  }
-  if (userProfile.concerns.includes('Redness')) {
-    Object.keys(productRecommendations).forEach(skinType => {
-      Object.keys(productRecommendations[skinType]).forEach(level => {
-        productRecommendations[skinType][level].push({ name: 'Azelaic Acid Suspension 10% - The Ordinary', category: 'Serum' });
-      });
-    });
-  }
-  if (userProfile.concerns.includes('Large Pores')) {
-    Object.keys(productRecommendations).forEach(skinType => {
-      Object.keys(productRecommendations[skinType]).forEach(level => {
-        productRecommendations[skinType][level].push({ name: 'Paula’s Choice 2% BHA Liquid Exfoliant', category: 'Exfoliant' });
-      });
-    });
-  }
 
   const handleSkinTypeSelect = (type) => {
     setUserProfile(prev => ({ ...prev, skinType: type }));
