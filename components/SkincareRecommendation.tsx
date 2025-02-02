@@ -223,45 +223,46 @@ const SkincareRecommendation = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-200 to-blue-400 p-8">
-      <div className="max-w-3xl mx-auto px-2">
-        <Card className="bg-white shadow-xl rounded-4xl p-6">
-          <CardHeader className="text-center">
-            <CardTitle className="text-5xl font-extrabold text-blue-600">
+    <div className="min-h-screen bg-gradient-to-b from-blue-200 to-blue-400 p-2 sm:p-8">
+      <div className="max-w-3xl mx-auto">
+        <Card className="bg-white shadow-xl rounded-xl sm:rounded-3xl">
+          <CardHeader className="text-center p-4 sm:p-6">
+            <CardTitle className="text-3xl sm:text-5xl font-extrabold text-blue-600">
               DermMatch
             </CardTitle>
-            <p className="text-lg text-gray-500 mt-2">Personalized Skincare Recommendations</p>
+            <p className="text-sm sm:text-lg text-gray-500 mt-2">Personalized Skincare Recommendations</p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 sm:p-6">
             {!showResults ? (
               <>
-                <div className="flex items-center justify-center mb-10">
-                  <div className={`flex items-center space-x-4 ${step === 1 ? 'text-blue-500' : ''}`}>
-                    <Sun /> <span>1. Skin Type</span>
-                  </div>
-                  <div className="w-10 border-t border-gray-300"></div>
-                  <div className={`flex items-center space-x-4 ${step === 2 ? 'text-blue-500' : ''}`}>
-                    <Leaf /> <span>2. Concerns</span>
-                  </div>
-                  <div className="w-10 border-t border-gray-300"></div>
-                  <div className={`flex items-center space-x-4 ${step === 3 ? 'text-blue-500' : ''}`}>
-                    <Droplet /> <span>3. Allergies</span>
-                  </div>
-                  <div className="w-10 border-t border-gray-300"></div>
-                  <div className={`flex items-center space-x-4 ${step === 4 ? 'text-blue-500' : ''}`}>
-                    <Bot /> <span>4. Routine Level</span>
-                  </div>
-                </div>
+                <div className="flex flex-wrap justify-center mb-10">
+                {[
+                  { icon: Sun, label: "1" },
+                  { icon: Leaf, label: "2" },
+                  { icon: Droplet, label: "3" },
+                  { icon: Bot, label: "4" }
+                ].map((stepItem, index) => (
+                  <React.Fragment key={index}>
+                    <div
+                      className={`flex items-center space-x-2 ${step === index + 1 ? 'text-blue-500' : ''} flex-grow sm:flex-none`}
+                    >
+                      <stepItem.icon size={24} className="sm:w-6 sm:h-6 w-5 h-5" />
+                      <span className="text-sm sm:text-base">{stepItem.label}</span>
+                    </div>
+                    {index < 3 && <div className="w-10 border-t border-gray-300"></div>}
+                  </React.Fragment>
+                ))}
+            </div>
 
                 {step === 1 && (
-                  <div className="space-y-10">
-                    <h2 className="text-xl font-semibold">🌿 Select Your Skin Type</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+                  <div className="space-y-6">
+                    <h2 className="text-lg sm:text-xl font-semibold">🌿 Select Your Skin Type</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       {skinTypes.map((type) => (
                         <Button
                           key={type}
                           variant={userProfile.skinType === type ? 'default' : 'outline'}
-                          className="h-24"
+                          className="h-16 sm:h-24 text-sm sm:text-base"
                           onClick={() => handleSkinTypeSelect(type)}
                         >
                           {type}
@@ -272,133 +273,132 @@ const SkincareRecommendation = () => {
                 )}
 
                 {step === 2 && (
-                  <div className="space-y-10">
-                    <h2 className="text-xl font-semibold">💧 Select Your Skin Concerns</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-                      {skinConcerns.map(concern => (
-                        <Button
-                          key={concern}
-                          variant={userProfile.concerns.includes(concern) ? "default" : "outline"}
-                          className="h-24"
-                          onClick={() => handleConcernToggle(concern)}
-                        >
-                          {concern}
-                        </Button>
-                      ))}
-                    </div>
-                    <div className="flex justify-between mt-6">
-                      <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
-                      <Button variant="outline" onClick={() => setStep(3)}>Next</Button>
-                    </div>
+                  <div className="space-y-6">
+                  <h2 className="text-lg sm:text-xl font-semibold">💧 Select Your Skin Concerns</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {skinConcerns.map(concern => (
+                      <Button
+                        key={concern}
+                        variant={userProfile.concerns.includes(concern) ? "default" : "outline"}
+                        className="h-16 sm:h-24 text-sm sm:text-base"
+                        onClick={() => handleConcernToggle(concern)}
+                      >
+                        {concern}
+                      </Button>
+                    ))}
                   </div>
+                  <div className="flex justify-between mt-4">
+                    <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
+                    <Button variant="outline" onClick={() => setStep(3)}>Next</Button>
+                  </div>
+                </div>
                 )}
 
                 {step === 3 && (
-                  <div className="space-y-10">
-                    <h2 className="text-xl font-semibold">🌸 Select Any Allergies</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-                      {commonAllergies.map(allergy => (
-                        <Button
-                          key={allergy}
-                          variant={userProfile.allergies.includes(allergy) ? "default" : "outline"}
-                          className="h-24"
-                          onClick={() => handleAllergyToggle(allergy)}
-                        >
-                          {allergy}
-                        </Button>
-                      ))}
-                    </div>
-                    <div className="flex justify-between mt-6">
-                      <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
-                      <Button variant="outline" onClick={() => setStep(4)}>Next</Button>
-                    </div>
+                  <div className="space-y-6">
+                  <h2 className="text-lg sm:text-xl font-semibold">🌸 Select Any Allergies</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {commonAllergies.map(allergy => (
+                      <Button
+                        key={allergy}
+                        variant={userProfile.allergies.includes(allergy) ? "default" : "outline"}
+                        className="h-16 sm:h-24 text-sm sm:text-base"
+                        onClick={() => handleAllergyToggle(allergy)}
+                      >
+                        {allergy}
+                      </Button>
+                    ))}
                   </div>
-                )}
+                  <div className="flex justify-between mt-4">
+                    <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
+                    <Button variant="outline" onClick={() => setStep(4)}>Next</Button>
+                  </div>
+                </div>
+              )}
 
-                {step === 4 && (
-                  <div className="space-y-10">
-                    <h2 className="text-xl font-semibold">🧴 Select Your Routine Level</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                      {routineLevels.map(level => (
-                        <Button
-                          key={level}
-                          variant={userProfile.routineLevel === level ? "default" : "outline"}
-                          className="h-24"
-                          onClick={() => handleRoutineLevelSelect(level)}
-                        >
-                          {level}
-                        </Button>
-                      ))}
-                    </div>
+              {step === 4 && (
+                <div className="space-y-6">
+                  <h2 className="text-lg sm:text-xl font-semibold">🧴 Select Your Routine Level</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {routineLevels.map(level => (
+                      <Button
+                        key={level}
+                        variant={userProfile.routineLevel === level ? "default" : "outline"}
+                        className="h-16 sm:h-24 text-sm sm:text-base"
+                        onClick={() => handleRoutineLevelSelect(level)}
+                      >
+                        {level}
+                      </Button>
+                    ))}
                   </div>
+                </div>
                 )}
               </>
             ) : (
-              <div className="space-y-10">
-                <div className="space-y-10">
-                  <h2 className="text-xl font-semibold">Your Profile</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <Card>
-                      <CardContent className="pt-6">
-                        <p className="font-medium">Skin Type:</p>
-                        <p>{userProfile.skinType}</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <p className="font-medium">Concerns:</p>
-                        <p>{userProfile.concerns.join(', ') || 'None selected'}</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                      <p className="font-medium">Allergies:</p>
-                        <p>{userProfile.allergies.join(', ') || 'None selected'}</p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <p className="font-medium">Routine Level:</p>
-                        <p>{userProfile.routineLevel}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-                
-                <div className="space-y-10">
-                  <h2 className="text-xl font-semibold">Recommended Products ✅</h2>
-                  {getRecommendations()?.map((product) => (
-                    <Card key={product.name}>
-                      <CardContent className="pt-6">
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-gray-500">Category: {product.category}</p>
-                      </CardContent>
-                    </Card>
-                  )) || <p>No recommendations available.</p>}
-                </div>
-                
-                <div className="space-y-10">
-                  <h2 className="text-xl font-semibold">Ingredients to Avoid ❌</h2>
-                  {getAvoidanceRecommendations().length > 0 ? (
-                    getAvoidanceRecommendations().map((item, index) => (
-                      <Card key={index}>
-                        <CardContent className="pt-6">
-                          <p className="font-medium">{item.ingredient}</p>
-                          <p className="text-gray-500">{item.reason}</p>
+              <div className="space-y-8">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4">Your Profile</h2>
+                  <div className="grid grid-cols-1 gap-4">
+                    {[
+                      { label: "Skin Type", value: userProfile.skinType },
+                      { label: "Concerns", value: userProfile.concerns.join(", ") || "None selected" },
+                      { label: "Allergies", value: userProfile.allergies.join(", ") || "None selected" },
+                      { label: "Routine Level", value: userProfile.routineLevel },
+                    ].map((item, index) => (
+                      <Card key={index} className="bg-gray-50">
+                        <CardContent className="p-4 flex items-center justify-between min-h-[60px]">
+                          <p className="font-medium">{item.label}</p>
+                          <p className="text-sm text-gray-700">{item.value}</p>
                         </CardContent>
                       </Card>
-                    ))
-                  ) : (
-                    <p>No specific ingredients to avoid.</p>
-                  )}
+                    ))}
+                  </div>
                 </div>
-                
-                <div className="flex justify-center mt-15">
-                  <Button variant="outline" className="border-4 border-gray-500 text-l px-6 py-3" onClick={() => {
-                    setUserProfile({ skinType: '', concerns: [], allergies: [], routineLevel: '' });
-                    setStep(1);
-                    setShowResults(false);
-                  }}>Start Over</Button>
+
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4">
+                    Recommended Products ✅
+                  </h2>
+                  <div className="grid grid-cols-1 gap-4">
+                    {getRecommendations()?.map((product) => (
+                      <Card key={product.name} className="bg-gray-50">
+                        <CardContent className="p-4 flex flex-col justify-center min-h-[70px]">
+                          <p className="font-medium">{product.name}</p>
+                          <p className="text-sm text-gray-500 mt-1">Category: {product.category}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4">
+                    Ingredients to Avoid ❌
+                  </h2>
+                  <div className="grid grid-cols-1 gap-4">
+                    {getAvoidanceRecommendations().map((item, index) => (
+                      <Card key={index} className="bg-gray-50">
+                        <CardContent className="p-4 flex flex-col justify-center min-h-[70px]">
+                          <p className="font-medium">{item.ingredient}</p>
+                          <p className="text-sm text-gray-500 mt-1">{item.reason}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-center pt-4 pb-2">
+                  <Button
+                    variant="outline"
+                    className="w-full sm:w-auto border-2 px-8 py-2"
+                    onClick={() => {
+                      setUserProfile({ skinType: '', concerns: [], allergies: [], routineLevel: '' });
+                      setStep(1);
+                      setShowResults(false);
+                    }}
+                  >
+                    Start Over
+                  </Button>
                 </div>
               </div>
             )}
