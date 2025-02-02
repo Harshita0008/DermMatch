@@ -3,24 +3,62 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, Sun, Leaf, Droplet, Bot } from 'lucide-react';
+import { Sun, Leaf, Droplet, Bot } from 'lucide-react';
+
+// Define all possible values as literal types
+type SkinType = 'Oily' | 'Dry' | 'Combination';
+type SkinConcern = 'Acne' | 'Aging' | 'Hyperpigmentation' | 'Redness' | 'Large Pores';
+type Allergy = 'Fragrance' | 'Essential Oils' | 'Salicylic Acid' | 'Benzoyl Peroxide' | 'Nuts';
+type RoutineLevel = 'Minimal' | 'Medium' | 'Complete';
+
+type AvoidanceGuideline = {
+    ingredient: string;
+    reason: string;
+};
+
+type SkinTypeAvoidance = {
+    [key in SkinType]: AvoidanceGuideline[];
+};
+  
+type AllergyAvoidance = {
+    [key in Allergy]: AvoidanceGuideline[];
+};
+
+type UserProfile = {
+    skinType: SkinType | '';
+    concerns: SkinConcern[];
+    allergies: Allergy[];
+    routineLevel: RoutineLevel | '';
+};
+
+type Product = {
+    name: string;
+    category: string;
+};
+
+type ProductRecommendations = {
+    [key in SkinType]: {
+        [key in RoutineLevel]: Product[];
+    };
+};
 
 const SkincareRecommendation = () => {
   const [step, setStep] = useState(1);
-  const [userProfile, setUserProfile] = useState({
+  const [userProfile, setUserProfile] = useState<UserProfile>({
     skinType: '',
     concerns: [],
     allergies: [],
     routineLevel: '',
   });
+  
   const [showResults, setShowResults] = useState(false);
 
-  const skinTypes = ['Oily', 'Dry', 'Combination'];
-  const skinConcerns = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Large Pores'];
-  const commonAllergies = ['Fragrance', 'Essential Oils', 'Salicylic Acid', 'Benzoyl Peroxide', 'Nuts'];
-  const routineLevels = ['Minimal', 'Medium', 'Complete'];
+  const skinTypes: SkinType[] = ['Oily', 'Dry', 'Combination'];
+  const skinConcerns: SkinConcern[] = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Large Pores'];
+  const commonAllergies: Allergy[] = ['Fragrance', 'Essential Oils', 'Salicylic Acid', 'Benzoyl Peroxide', 'Nuts'];
+  const routineLevels: RoutineLevel[] = ['Minimal', 'Medium', 'Complete'];
 
-  const productRecommendations = {
+  const productRecommendations: ProductRecommendations = {
     Oily: {
         Minimal: [
           { name: 'CeraVe Foaming Facial Cleanser', category: 'Cleanser' },
@@ -36,8 +74,8 @@ const SkincareRecommendation = () => {
           { name: 'Neutrogena Hydro Boost Water Gel', category: 'Moisturizer' },
           { name: 'Desconstruct Gel Sunscreen', category: 'Sunscreen' }
         ]
-      },
-      Dry: {
+    },
+    Dry: {
         Minimal: [
           { name: 'Cetaphil Gentle Cleanser', category: 'Cleanser' },
           { name: 'Emolene or Venusia Max', category: 'Moisturizer' }
@@ -54,15 +92,94 @@ const SkincareRecommendation = () => {
           { name: 'Emolene or Venusia Max', category: 'Moisturizer' },
           { name: 'Minimalist SPF 50 PA ++++', category: 'Sunscreen' }
         ]
+    },
+    Combination: {
+        Minimal: [
+          { name: 'Cetaphil Gentle Cleanser', category: 'Cleanser' },
+          { name: 'CeraVe Moisturizer', category: 'Moisturizer' }
+        ],
+        Medium: [
+          { name: 'Cetaphil Gentle Cleanser', category: 'Cleanser' },
+          { name: 'CeraVe Moisturizer', category: 'Moisturizer' },
+          { name: 'Dot And Key SPF 50 PA ++++', category: 'Sunscreen' }
+        ],
+        Complete: [
+          { name: 'Cetaphil Gentle Cleanser', category: 'Cleanser' },
+          { name: 'Klairs Supple Preparation Toner', category: 'Toner' },
+          { name: 'The Ordinary Niacinamide 10% + Zinc 1% or Vitamin C', category: 'Serum' },
+          { name: 'CeraVe Moisturizer', category: 'Moisturizer' },
+          { name: 'Dot And Key SPF 50 PA ++++', category: 'Sunscreen' }
+        ]
     }
+  };
+
+  const skinTypeAvoidance: SkinTypeAvoidance = {
+    Oily: [
+      { ingredient: 'Heavy oils and butters', reason: 'Can clog pores and increase sebum production' },
+      { ingredient: 'Alcohol-heavy products', reason: 'Can trigger increased oil production' },
+      { ingredient: 'Thick creams', reason: 'May lead to congestion and breakouts' }
+    ],
+    Dry: [
+      { ingredient: 'Harsh cleansers', reason: 'Can strip natural oils and worsen dryness' },
+      { ingredient: 'High concentration alcohols', reason: 'Can cause further dehydration' },
+      { ingredient: 'Hot water washing', reason: 'Disrupts skin barrier and removes natural oils' }
+    ],
+    Combination: [
+      { ingredient: 'Very heavy oils', reason: 'May clog pores in oily areas' },
+      { ingredient: 'Harsh exfoliants', reason: 'Can irritate dry areas while over-stimulating oily zones' },
+      { ingredient: 'One-size-fits-all products', reason: 'May not address different needs of different facial areas' }
+    ]
+  };
+
+  const allergyAvoidance: AllergyAvoidance = {
+    'Fragrance': [
+      { ingredient: 'Synthetic fragrances', reason: 'Direct allergen' },
+      { ingredient: 'Natural fragrances', reason: 'Can still cause reactions' },
+      { ingredient: 'Essential oils', reason: 'Often contain natural fragrances' }
+    ],
+    'Essential Oils': [
+      { ingredient: 'All essential oils', reason: 'Direct allergen' },
+      { ingredient: 'Natural extracts', reason: 'May contain essential oils' },
+      { ingredient: 'Botanical fragrances', reason: 'Often derived from essential oils' }
+    ],
+    'Salicylic Acid': [
+      { ingredient: 'BHA (Beta Hydroxy Acid)', reason: 'Another name for salicylic acid' },
+      { ingredient: 'Willow bark extract', reason: 'Natural source of salicylic acid' },
+      { ingredient: 'Oil-soluble exfoliants', reason: 'May contain salicylic acid' }
+    ],
+    'Benzoyl Peroxide': [
+      { ingredient: 'BP treatments', reason: 'Direct allergen' },
+      { ingredient: 'Acne-specific products', reason: 'Often contain benzoyl peroxide' },
+      { ingredient: 'Oxidizing agents', reason: 'May cause similar reactions' }
+    ],
+    'Nuts': [
+      { ingredient: 'Nut oils', reason: 'Direct allergen source' },
+      { ingredient: 'Natural oil blends', reason: 'May contain nut oils' },
+      { ingredient: 'Plant-based emollients', reason: 'Check for nut-derived ingredients' }
+    ]
+  };
+
+  const getAvoidanceRecommendations = () => {
+    let recommendations: AvoidanceGuideline[] = [];
+    
+    // Add skin type specific recommendations
+    if (isSkinType(userProfile.skinType)) {
+      recommendations = [...skinTypeAvoidance[userProfile.skinType]];
+    }
+
+    // Add allergy specific recommendations
+    userProfile.allergies.forEach(allergy => {
+      recommendations = [...recommendations, ...allergyAvoidance[allergy]];
+    });
+    return recommendations;
 };
 
-  const handleSkinTypeSelect = (type) => {
+  const handleSkinTypeSelect = (type: SkinType) => {
     setUserProfile(prev => ({ ...prev, skinType: type }));
     setStep(2);
   };
 
-  const handleConcernToggle = (concern) => {
+  const handleConcernToggle = (concern: SkinConcern) => {
     setUserProfile(prev => ({
       ...prev,
       concerns: prev.concerns.includes(concern)
@@ -70,21 +187,41 @@ const SkincareRecommendation = () => {
         : [...prev.concerns, concern]
     }));
   };
-
-  const handleAllergyToggle = (allergy) => {
+  
+  const handleAllergyToggle = (allergy: Allergy) => {
     setUserProfile(prev => ({
       ...prev,
       allergies: prev.allergies.includes(allergy)
         ? prev.allergies.filter(a => a !== allergy)
         : [...prev.allergies, allergy]
     }));
-  };
+  };  
 
-  const handleRoutineLevelSelect = (level) => {
+  const handleRoutineLevelSelect = (level: RoutineLevel) => {
     setUserProfile(prev => ({ ...prev, routineLevel: level }));
     setShowResults(true);
   };
 
+  // Type guard functions
+  const isSkinType = (type: string): type is SkinType => {
+    return skinTypes.includes(type as SkinType);
+  };
+
+  const isRoutineLevel = (level: string): level is RoutineLevel => {
+    return routineLevels.includes(level as RoutineLevel);
+  };
+
+  // Helper function to get recommendations safely
+  const getRecommendations = () => {
+    if (
+      isSkinType(userProfile.skinType) && 
+      isRoutineLevel(userProfile.routineLevel)
+    ) {
+      return productRecommendations[userProfile.skinType][userProfile.routineLevel];
+    }
+    return null;
+  };
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-200 to-blue-400 p-8">
       <div className="max-w-5xl mx-auto px-6">
@@ -120,10 +257,10 @@ const SkincareRecommendation = () => {
                   <div className="space-y-10">
                     <h2 className="text-xl font-semibold">🌿 Select Your Skin Type</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-                      {skinTypes.map(type => (
+                      {skinTypes.map((type) => (
                         <Button
                           key={type}
-                          variant={userProfile.skinType === type ? "default" : "outline"}
+                          variant={userProfile.skinType === type ? 'default' : 'outline'}
                           className="h-24"
                           onClick={() => handleSkinTypeSelect(type)}
                         >
@@ -215,7 +352,7 @@ const SkincareRecommendation = () => {
                     </Card>
                     <Card>
                       <CardContent className="pt-6">
-                        <p className="font-medium">Allergies:</p>
+                      <p className="font-medium">Allergies:</p>
                         <p>{userProfile.allergies.join(', ') || 'None selected'}</p>
                       </CardContent>
                     </Card>
@@ -227,39 +364,42 @@ const SkincareRecommendation = () => {
                     </Card>
                   </div>
                 </div>
-
-                {productRecommendations[userProfile.skinType] && productRecommendations[userProfile.skinType][userProfile.routineLevel] && (
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-semibold flex items-center gap-2">
-                      <CheckCircle2 className="text-green-500" />
-                      Recommended Products for {userProfile.routineLevel} Routine
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {productRecommendations[userProfile.skinType][userProfile.routineLevel].map((product, idx) => (
-                        <Card key={idx}>
-                          <CardContent className="pt-6">
-                            <h3 className="font-semibold text-lg">{product.name}</h3>
-                            <p className="text-sm text-gray-600 mt-2">
-                              <span className="font-medium">Category:</span> {product.category}
-                            </p>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setShowResults(false);
-                    setStep(1);
+                
+                <div className="space-y-10">
+                  <h2 className="text-xl font-semibold">Recommended Products ✅</h2>
+                  {getRecommendations()?.map((product) => (
+                    <Card key={product.name}>
+                      <CardContent className="pt-6">
+                        <p className="font-medium">{product.name}</p>
+                        <p className="text-gray-500">Category: {product.category}</p>
+                      </CardContent>
+                    </Card>
+                  )) || <p>No recommendations available.</p>}
+                </div>
+                
+                <div className="space-y-10">
+                  <h2 className="text-xl font-semibold">Ingredients to Avoid ❌</h2>
+                  {getAvoidanceRecommendations().length > 0 ? (
+                    getAvoidanceRecommendations().map((item, index) => (
+                      <Card key={index}>
+                        <CardContent className="pt-6">
+                          <p className="font-medium">{item.ingredient}</p>
+                          <p className="text-gray-500">{item.reason}</p>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <p>No specific ingredients to avoid.</p>
+                  )}
+                </div>
+                
+                <div className="flex justify-center mt-15">
+                  <Button variant="outline" className="border-4 border-gray-500 text-l px-6 py-3" onClick={() => {
                     setUserProfile({ skinType: '', concerns: [], allergies: [], routineLevel: '' });
-                  }}
-                  className="w-full py-4 border-2 border-gray-300 rounded-2xl hover:border-gray-500"
-                >
-                  Start Over
-                </Button>
+                    setStep(1);
+                    setShowResults(false);
+                  }}>Start Over</Button>
+                </div>
               </div>
             )}
           </CardContent>
