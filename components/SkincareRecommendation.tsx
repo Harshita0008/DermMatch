@@ -224,8 +224,8 @@ const SkincareRecommendation = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-200 to-blue-400 p-8">
-      <div className="max-w-5xl mx-auto px-6">
-        <Card className="bg-white shadow-xl rounded-3xl p-6">
+      <div className="max-w-3xl mx-auto px-2">
+        <Card className="bg-white shadow-xl rounded-4xl p-6">
           <CardHeader className="text-center">
             <CardTitle className="text-5xl font-extrabold text-blue-600">
               DermMatch
@@ -235,7 +235,7 @@ const SkincareRecommendation = () => {
           <CardContent>
             {!showResults ? (
               <>
-                <div className="flex items-center justify-center mb-8">
+                <div className="flex items-center justify-center mb-10">
                   <div className={`flex items-center space-x-4 ${step === 1 ? 'text-blue-500' : ''}`}>
                     <Sun /> <span>1. Skin Type</span>
                   </div>
